@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: ms-user-management
+  jpa:
+    database: H2
+    show-sql: true
+    properties:
+      hibernate:
+        ddl-auto: create-drop
+        default-schema: autosparescm
+        dialect: org.hibernate.dialect.H2Dialect
+  cloud:
+    discovery:
+      enabled: false
+    loadbalancer:
+      ribbon:
+        enabled: true
+      eureka:
+        approximateZoneFromHostname: true
+  data:
+    rest:
+      detection-strategy: annotated
+
+auto-spare:
+  scm:
+    datasource:
+      jdbc-url: jdbc:h2:mem:test;INIT=create schema IF NOT EXISTS autosparescm;DB_CLOSE_DELAY=-1
+      driver-class-name: org.h2.Driver
+
+UID: sa
+PWD: password
+
+server:
+  port: 8001
+  servlet:
+    context-path: /usermanagementservices
+
+springdoc:
+  api-docs:
+    enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    enabled: true
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8042/eureka/
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 5000
+
+ribbon:
+  ConnectTimeout: 5000
+  ReadTimeout: 5000
+
